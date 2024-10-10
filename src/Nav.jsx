@@ -1,5 +1,5 @@
 import React from 'react'
-
+import { Link } from 'react-router-dom';
 function Nav() {
   return (
     <div>
@@ -22,14 +22,14 @@ function Nav() {
           <div className="collapse navbar-collapse" id="navbarNavDropdown">
             <ul className="navbar-nav">
               <li className="nav-item">
-                <a className="nav-link active" aria-current="page" href="#">
+                <Link className="nav-link active" aria-current="page" to="/home" >
                   Home
-                </a>
+                </Link>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="#">
+                <Link className="nav-link" to="/addpets">
                   Add Pet
-                </a>
+                </Link>
               </li>
               {/* <li className="nav-item">
                 <a className="nav-link" href="#">

@@ -8,7 +8,7 @@ import Nav from "./Nav"
 function Home() {
 
 const [petData,setPetData] = useState([])
-const storedData = localStorage.getItem("userData");
+const storedData = localStorage.getItem("token");
 if (!storedData) {
   console.error("No user data found in localStorage");
   return;
@@ -22,6 +22,7 @@ const parsedData = storedData ? JSON.parse(storedData) : null;
 const token = parsedData ? parsedData.token : null;
 useEffect(()=>{
   const fetchdata = async ()=>{
+    
     try{
       const res = await axios.get(`${API}/pets/get-pets`,{
         headers : {
@@ -30,8 +31,8 @@ useEffect(()=>{
        });
        console.log(res.data);
         setPetData(res.data);
-    }catch(err){
-      console.error({ error: err.message });
+    }catch(error){
+      console.error({ error: error.message });
     }
   };
   fetchdata();

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Form, Input, Button, Upload, message } from 'antd';
+import { Form, Input, Button, Upload, message, Radio } from 'antd';
 import axios from 'axios';
 import { API } from '../global';
 
@@ -13,24 +13,30 @@ const AddPet = () => {
         const formData = new FormData();
         formData.append('name', values.name);
         formData.append('breed', values.breed);
+        formData.append('gender', values.gender);
         formData.append('details', values.details);
         fileList.forEach(file => {
-            formData.append('photos', file.originFileObj);
+            formData.append('image', file.originFileObj);
         });
-
+        const token = localStorage.getItem('token')
+        console.log("Token",token)
         try {
-            const response = await axios.post(`${API}/pets`, formData, {
+            const response = await axios.post(`${API}/pets/addpets`,formData,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    'Authorization': localStorage.getItem('token') // Send token for authorization
+                    'Authorization': `Bearer ${token}` // Send token for authorization
                 }
             });
             message.success(response.data.message);
             form.resetFields();
             setFileList([]);
         } catch (error) {
+            if (error.response && error.response.data.error === 'jwt expired') {
+                message.error('Session expired, please log in again');
+                navigate('/users/login'); 
+              }else{
             console.error('Error adding pet:', error);
-            message.error('Failed to add pet.');
+            message.error('Failed to add pet.');}
         }
     };
 
@@ -51,13 +57,23 @@ const AddPet = () => {
                 <Input />
             </Form.Item>
             <Form.Item
+                label="Gender"
+                name="gender"
+                rules={[{ required: true, message: 'Please select the gender!' }]}
+            >
+                <Radio.Group>
+                    <Radio value="Male">Male</Radio>
+                    <Radio value="Female">Female</Radio>
+                </Radio.Group>
+            </Form.Item>
+            <Form.Item
                 label="Details"
                 name="details"
                 rules={[{ required: true, message: 'Please input the details!' }]}
             >
                 <Input.TextArea />
             </Form.Item>
-            <Form.Item label="Photos">
+            <Form.Item label="Image">
                 <Upload 
                     fileList={fileList} 
                     onChange={handleUploadChange} 

@@ -12,26 +12,23 @@ function Login() {
           console.log(values)
         const res = await axios.post(`${API}/users/login`,values)
           message.success("Login Success");
+          await console.log(res.data)
           if(!res.data){
             console.error("No res data found in localStorage - Login");
       return;
           }
-         const token = res.data.token;
-         const petId = res.data._id
-         localStorage.setItem("userData",JSON.stringify({"token":token,"petId":petId}))
+         localStorage.setItem("token",JSON.stringify({token : res.data.token,userId : res.data.id, role : res.data.role}))
          navigate("/home")
         }
-        
         catch(err){
           console.error("Error:",err)
-        message.error("Invalid Credentials")
+          message.error("Invalid Credentials")
         }
       };
 
        const handleSignup = () => {
     navigate('/signup');
   };
-
   
   const handleForgotPassword = () => {
     navigate('/forgot-password');

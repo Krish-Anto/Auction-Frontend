@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import axios from "axios"
 import {
   TextField,
   Button,
@@ -6,6 +7,9 @@ import {
   Typography,
   Container,
 } from '@mui/material';
+import { API } from '../../global';
+import { message } from 'antd';
+
 
 const AdoptPetForm = () => {
   const [formData, setFormData] = useState({
@@ -23,10 +27,24 @@ const AdoptPetForm = () => {
     }));
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
-    // Here you can handle form submission (e.g., send data to an API)
-    console.log('Adoption Form Data:', formData);
+    // const formData = {
+    //   name: formData.name,
+    //   email: formData.email,
+    //   phone: formData.phone,
+    //   details: formData.details
+    // };
+    try{
+      const token = localStorage.getItem('token');
+      const Adopter = await axios.post(`${API}/adoptForm/submit`,formData,{
+        headers:{
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if(Adopter.data.success){
+        message.success("Form Submitted Successfully")
+      console.log('Adoption Form Data:', formData);
     // Reset form
     setFormData({
       name: '',
@@ -34,6 +52,14 @@ const AdoptPetForm = () => {
       phone: '',
       message: '',
     });
+      }else{
+        message.error("Failed to submit form.");
+      }
+    }
+    catch(error){
+        console.error("Error Submission Failed", error)
+        message.error("Form Submission Failed");
+    }
   };
 
   return (
