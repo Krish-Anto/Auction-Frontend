@@ -18,8 +18,14 @@ const AddPet = () => {
         fileList.forEach(file => {
             formData.append('image', file.originFileObj);
         });
-        const token = localStorage.getItem('token')
+        const Token = localStorage.getItem('token')
+        const parsedToken =  JSON.parse(Token);
+        const {token} = parsedToken;
         console.log("Token",token)
+        if (!token) {
+            message.error('No authorization token found. Please login.');
+            return;
+        }
         try {
             const response = await axios.post(`${API}/pets/addpets`,formData,{
                 headers: {
@@ -30,10 +36,11 @@ const AddPet = () => {
             message.success(response.data.message);
             form.resetFields();
             setFileList([]);
+            navigate("/home");
         } catch (error) {
             if (error.response && error.response.data.error === 'jwt expired') {
                 message.error('Session expired, please log in again');
-                navigate('/users/login'); 
+                navigate('/login'); 
               }else{
             console.error('Error adding pet:', error);
             message.error('Failed to add pet.');}
@@ -78,6 +85,7 @@ const AddPet = () => {
                     fileList={fileList} 
                     onChange={handleUploadChange} 
                     beforeUpload={() => false} // Prevent automatic upload
+                    listType="picture"  
                 >
                     <Button>Upload</Button>
                 </Upload>

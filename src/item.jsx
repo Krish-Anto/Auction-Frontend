@@ -6,19 +6,42 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Card, CardContent, Typography,IconButton,CardMedia, Button} from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
-const Item = ({item}) => {
+import axios from 'axios';
+import { API } from '../global';
+const pet = ({pet,setPetdata}) => {
  
   const [expanded, setExpanded] = useState(false);
   const navigate = useNavigate()
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  const handleEdit = () => {
-    alert("Edit button clicked!");
+  const handleEdit = async (petId) => {
+    navigate("/editpet")
   };
-  const handleDelete = () => {
-    alert("Edit button clicked!");
-  };
+  
+  const handleDelete = async(petId) => {
+    
+    try {
+      const upToken = localStorage.getItem("token")
+      const { token } = JSON.parse(upToken);
+      console.log(token)
+      if (!token) {
+        console.error('No token found');
+        return;
+      }
+      const response = await axios.delete(`${API}/pets/delete-pet/${petId}`, 
+          {
+              headers: {
+                  "Authorization" : `Bearer ${token}` // Pass token in Authorization header
+              }
+          });
+          console.log(response.data)
+      console.log(response.data.message);
+        setPetData((prevData)=>prevData.filter((pet)=>pet._id !== petId))
+  } catch (error) {
+      console.error("Error deleting pet:", error);
+  }
+  }
   const handleSubmit = () => {
     navigate("/adoptForm")
   };
@@ -27,18 +50,18 @@ const Item = ({item}) => {
       <CardMedia
         component="img"
         height="200"
-        image={item.image}
-        alt={item.name}
+        image={pet.image}
+        alt={pet.name}
       />
     <CardContent>
       <Typography variant="h5" component="div">
-         Name : {item.name}
+         Name : {pet.name}
       </Typography>
       <Typography variant="h5" component="div">
-         Breed : {item.breed}
+         Breed : {pet.breed}
       </Typography>
       <Typography variant="body2" color="text.secondary">
-        {item.details}
+        {pet.details}
       </Typography>
       <IconButton
         onClick={handleExpandClick}
@@ -54,11 +77,11 @@ const Item = ({item}) => {
       </IconButton>
       {expanded ? (
   <div>
-    <h5>{item.details}</h5>
+    <h5>{pet.details}</h5>
       <IconButton onClick={handleEdit} aria-label="edit">
           <EditIcon />
       </IconButton>,
-      <IconButton onClick={handleDelete} aria-label="edit">
+      <IconButton onClick={()=>handleDelete(pet._id)} aria-label="edit">
           <DeleteIcon />
       </IconButton>
       <Button
@@ -83,4 +106,4 @@ const Item = ({item}) => {
   </Card>
   )
 };
-export default Item;
+export default pet;

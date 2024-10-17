@@ -17,7 +17,8 @@ function Login() {
             console.error("No res data found in localStorage - Login");
       return;
           }
-         localStorage.setItem("token",JSON.stringify({token : res.data.token,userId : res.data.id, role : res.data.role}))
+          const token = {token : res.data.token,userId : res.data.id, role : res.data.role}
+         localStorage.setItem("token",JSON.stringify(token))
          navigate("/home")
         }
         catch(err){

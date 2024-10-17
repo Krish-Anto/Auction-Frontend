@@ -5,6 +5,7 @@ import Home from './Home'
 import Signup from './Signup'
 import AddPet from './AddPet'
 import AdoptPetForm from './Form/Adopt'
+import EditForm from './EditPet'
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Route path='/signup' element={<Signup/>} />
       <Route path='/addpets' element={<AddPet/>} />
       <Route path='/adoptForm' element={<AdoptPetForm/>} />
+      <Route path='/editpet' element={<EditForm/>} />
     </Routes>
     </BrowserRouter>
     </div>

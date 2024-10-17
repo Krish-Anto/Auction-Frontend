@@ -37,15 +37,14 @@ useEffect(()=>{
   };
   fetchdata();
 },[])
-
   return (
     <div >
       <Nav/>
       <div className="displayPet">
-      {petData.map((item)=>{
+      {petData.map((pet)=>{
         return(
-          console.log(item),
-        <Item className='item' key={item._id} item={item}/>
+          console.log(pet),
+        <Item className='item' key={pet._id} pet={pet} setPetdata={setPetData} petData ={petData}/>
         )
       }
       )}
