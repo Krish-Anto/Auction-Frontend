@@ -2,10 +2,13 @@ import React, { useState } from 'react';
 import { Form, Input, Button, Upload, message, Radio } from 'antd';
 import axios from 'axios';
 import { API } from '../global';
+import { useNavigate } from 'react-router-dom';
+import Nav from './Nav';
 
 const AddPet = () => {
     const [form] = Form.useForm();
     const [fileList, setFileList] = useState([]);
+    const navigate = useNavigate();
 
     const handleUploadChange = ({ fileList }) => setFileList(fileList);
 
@@ -36,6 +39,7 @@ const AddPet = () => {
             message.success(response.data.message);
             form.resetFields();
             setFileList([]);
+            
             navigate("/home");
         } catch (error) {
             if (error.response && error.response.data.error === 'jwt expired') {
@@ -43,12 +47,16 @@ const AddPet = () => {
                 navigate('/login'); 
               }else{
             console.error('Error adding pet:', error);
-            message.error('Failed to add pet.');}
+            message.error('Failed to add pet.')}
         }
     };
 
     return (
+        
         <Form form={form} onFinish={onFinish}>
+            <div>
+            <Nav/>
+           </div>
             <Form.Item
                 label="Pet Name"
                 name="name"

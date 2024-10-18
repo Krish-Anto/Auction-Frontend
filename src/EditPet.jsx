@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from "axios"
 import {
   TextField,
@@ -14,15 +14,43 @@ import {
 } from '@mui/material';
 import { message } from 'antd';
 import { API } from '../global';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { updatePet } from './CreateSlice/petSlice';
 
 
 const EditForm = () => {
+
+  const { petId } = useParams(); // Get petId from the route params
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+const location =useLocation();
+
+const petpass = location.state?.pet;
+
+  const pet = useSelector((state)=>
+  state.pets.pets.find((pet) =>pet.id === petId)
+  )
+  
+
   const [formData, setFormData] = useState({
     name: '',
     breed: '',
-    gender: '',
-    details: '',
+    gender:  '',
+    details:  '',
   });
+
+  useEffect(()=>{
+    const petData = petpass || pet;
+    if(petData){
+      setFormData({
+        name: petData.name || '',
+        breed: petData.breed || '',
+        gender: petData.gender || '',
+        details: petData.details || '',
+      })
+    }
+  },[petpass,pet]);
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -41,7 +69,8 @@ const EditForm = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      if(edit.data.success){
+      if(edit.status === 201 || edit.status === 200 || edit.data.success){
+        dispatch(updatePet({petId,formData}))
         message.success("Form Submitted Successfully")
       console.log('Adoption Form Data:', formData);
     // Reset form
@@ -51,6 +80,7 @@ const EditForm = () => {
       gender: '',
       details: '',
     });
+    navigate('/home',{state : {refresh : true}});
       }else{
         message.error("Failed to submit form.");
       }

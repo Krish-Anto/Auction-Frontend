@@ -15,8 +15,8 @@ const pet = ({pet,setPetdata}) => {
   const handleExpandClick = () => {
     setExpanded(!expanded);
   };
-  const handleEdit = async (petId) => {
-    navigate("/editpet")
+  const handleEdit = async () => {
+    navigate(`/editpet/${pet._id}`,{state : {pet}})
   };
   
   const handleDelete = async(petId) => {
@@ -37,7 +37,7 @@ const pet = ({pet,setPetdata}) => {
           });
           console.log(response.data)
       console.log(response.data.message);
-        setPetData((prevData)=>prevData.filter((pet)=>pet._id !== petId))
+        setPetdata((prevData)=>prevData.filter((pet)=>pet._id !== petId))
   } catch (error) {
       console.error("Error deleting pet:", error);
   }
@@ -49,7 +49,7 @@ const pet = ({pet,setPetdata}) => {
     <Card sx={{ maxWidth: 345, textAlign: 'center' }}>
       <CardMedia
         component="img"
-        height="200"
+        height="300"
         image={pet.image}
         alt={pet.name}
       />

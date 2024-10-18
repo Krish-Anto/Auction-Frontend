@@ -19,7 +19,7 @@ function App() {
       <Route path='/signup' element={<Signup/>} />
       <Route path='/addpets' element={<AddPet/>} />
       <Route path='/adoptForm' element={<AdoptPetForm/>} />
-      <Route path='/editpet' element={<EditForm/>} />
+      <Route path='/editpet/:petId' element={<EditForm/>} />
     </Routes>
     </BrowserRouter>
     </div>

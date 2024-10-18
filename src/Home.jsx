@@ -3,11 +3,13 @@ import { API } from "../global"
 import axios from "axios"
 import Item from "./item"
 import Nav from "./Nav"
+import { useLocation } from "react-router-dom"
 
 
 function Home() {
 
 const [petData,setPetData] = useState([])
+const location = useLocation()
 const storedData = localStorage.getItem("token");
 if (!storedData) {
   console.error("No user data found in localStorage");
@@ -31,12 +33,16 @@ useEffect(()=>{
        });
        console.log(res.data);
         setPetData(res.data);
+        
     }catch(error){
       console.error({ error: error.message });
+      
     }
   };
-  fetchdata();
-},[])
+  if(location.state?.refresh){
+    fetchdata()
+  }
+},[location.state])
   return (
     <div >
       <Nav/>
@@ -48,7 +54,7 @@ useEffect(()=>{
         )
       }
       )}
-    </div>
+    </div>   
     </div>
   )
 }

@@ -1,8 +1,8 @@
 import { configureStore } from "@reduxjs/toolkit";
-import itemReducer from '../CreateSlice/itemSlice'
+import petReducer from '../CreateSlice/petSlice'
 
 export const store = configureStore({
     reducer :{
-     petAuctionm:itemReducer
+     pets:petReducer
     }
 })
