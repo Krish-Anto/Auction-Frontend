@@ -8,6 +8,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API } from '../global';
+import { message } from 'antd';
 const pet = ({pet,setPetdata}) => {
  
   const [expanded, setExpanded] = useState(false);
@@ -36,7 +37,7 @@ const pet = ({pet,setPetdata}) => {
               }
           });
           console.log(response.data)
-      console.log(response.data.message);
+      message.success(response.data.message);
         setPetdata((prevData)=>prevData.filter((pet)=>pet._id !== petId))
   } catch (error) {
       console.error("Error deleting pet:", error);

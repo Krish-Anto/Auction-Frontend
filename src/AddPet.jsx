@@ -36,7 +36,7 @@ const AddPet = () => {
                     'Authorization': `Bearer ${token}` // Send token for authorization
                 }
             });
-            message.success(response.data.message);
+            message.success("Pet Added Successfully");
             form.resetFields();
             setFileList([]);
             

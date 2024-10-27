@@ -6,6 +6,7 @@ import Nav from "./Nav"
 import { useLocation } from "react-router-dom"
 
 
+
 function Home() {
 
 const [petData,setPetData] = useState([])
@@ -39,9 +40,8 @@ useEffect(()=>{
       
     }
   };
-  if(location.state?.refresh){
-    fetchdata()
-  }
+    fetchdata();
+  
 },[location.state])
   return (
     <div >
